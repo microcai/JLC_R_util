@@ -17,6 +17,13 @@ R_select_window::R_select_window(QWidget* parent, Qt::WindowFlags f)
     connect(out_voltage, SIGNAL(editingFinished()), this, SLOT(check_caculatable()));
     connect(resistance_type, SIGNAL(currentIndexChanged(int)), this, SLOT(check_caculatable()));
     connect(output_accuracy, SIGNAL(currentIndexChanged(int)), this, SLOT(check_caculatable()));
+
+    auto Validator = new QDoubleValidator(0.0, 9999.0, 5, this);
+
+    Validator->setNotation(QDoubleValidator::StandardNotation);
+
+    fb_voltage->setValidator(Validator);
+    out_voltage->setValidator(Validator);
 }
 
 qtcoro::awaitable<void> R_select_window::do_calc()
