@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>R_select_window</class>
  <widget class="QWidget" name="R_select_window">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>502</width>
+    <height>516</height>
+   </rect>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -17,13 +25,6 @@
         </size>
        </property>
       </spacer>
-     </item>
-     <item>
-      <widget class="QLabel" name="pic_show">
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
      </item>
      <item>
       <spacer name="horizontalSpacer_2">
@@ -42,6 +43,13 @@
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="pic_show">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>

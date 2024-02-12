@@ -11,7 +11,7 @@ R_select_window::R_select_window(QWidget* parent, Qt::WindowFlags f)
     : QWidget(parent, f)
 {
     setupUi(this);
-    pic_show->setPixmap(QPixmap(":/images/res/dcdc.png").scaledToWidth(800));
+    pic_show->setPixmap(QPixmap(":/images/res/dcdc.png").scaledToWidth(550));
 
     connect(fb_voltage, SIGNAL(editingFinished()), this, SLOT(check_caculatable()));
     connect(out_voltage, SIGNAL(editingFinished()), this, SLOT(check_caculatable()));
