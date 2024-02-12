@@ -204,7 +204,7 @@ p, li { white-space: pre-wrap; }
     </layout>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox_2">
+    <widget class="QGroupBox" name="result_box">
      <property name="title">
       <string>计算结果：</string>
      </property>
