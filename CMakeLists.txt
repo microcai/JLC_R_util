@@ -11,11 +11,15 @@ find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets )
 qt_standard_project_setup()
 
 include_directories(include)
+include_directories(src)
 include_directories(libs/qtcoro)
 
 qt_add_executable(edatool 
-    src/mainwindow.ui
+    src/R_select_window.hpp
     src/mainwindow.hpp
+    src/mainwindow.ui
+    src/R_select_window.ui
+    src/R_select_window.cpp
     src/mainwindow.cpp
     src/main.cpp
     src/R_gen.cpp

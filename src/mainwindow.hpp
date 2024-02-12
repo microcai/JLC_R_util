@@ -6,6 +6,7 @@
 #include "awaitable.hpp"
 
 #include "ui_mainwindow.h"
+#include "mainwindow.moc"
 
 class MainWindow : public QMainWindow, public Ui_MainWindow
 {
@@ -13,13 +14,5 @@ class MainWindow : public QMainWindow, public Ui_MainWindow
 public:
     MainWindow(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
     ~MainWindow();
-
-private:
-    qtcoro::awaitable<void> do_calc();
-
-public Q_SLOTS:
-    void check_caculatable();
-    void on_begin_calc_clicked();
 };
 
-#include "mainwindow.moc"
