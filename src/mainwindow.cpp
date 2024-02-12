@@ -63,7 +63,7 @@ qtcoro::awaitable<void> MainWindow::do_calc()
                 tableWidget->setItem(row, 0, new QTableWidgetItem(static_cast<QString>(R1)));
                 tableWidget->setItem(row, 1, new QTableWidgetItem(static_cast<QString>(R2)));
                 tableWidget->setItem(row, 2, new QTableWidgetItem(QString("%1").arg(Vout_calculated)));
-                tableWidget->setItem(row, 3, new QTableWidgetItem(QString("%1%%").arg(Err*100)));
+                tableWidget->setItem(row, 3, new QTableWidgetItem(QString("%1%").arg(Err*100)));
                 if (is_jlc)
                 {
                     // R_lib
