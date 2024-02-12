@@ -1,6 +1,6 @@
 
 #include "R_select_window.hpp"
-#include "ui_R_select_window.h"
+#include <QMessageBox>
 #include "awaitable.hpp"
 #include "R_gen.hpp"
 #include "z_gen.hpp"
@@ -44,6 +44,11 @@ qtcoro::awaitable<void> R_select_window::do_calc()
     R_lib r{r_type};
     Zgen z;
 
+    if (is_jlc)
+    {
+        z.set_size(r.get_R_counts()-1, r.get_R_counts()-1);
+    }
+
     int row = 0;
 
     tableWidget->clearContents();
@@ -52,7 +57,7 @@ qtcoro::awaitable<void> R_select_window::do_calc()
 
     try
     {
-        for(;;)
+        for(int c = 1;;c++)
         {
             Zidx = z();
 
@@ -77,9 +82,9 @@ qtcoro::awaitable<void> R_select_window::do_calc()
 
                 row ++;
                 
-                co_await coro_delay_ms(10);
+                co_await coro_delay_ms(0);
             }           
-            
+            // printf("tryed (%d, %d) [row %d], try count = %d\n" , Zidx.first, Zidx.second, row, c);
         }
     }catch(const std::out_of_range&)
     {

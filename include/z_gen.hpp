@@ -2,43 +2,90 @@
 #pragma once
 
 #include <utility>
+#include <stdexcept>
 
 // Z walker generator
 struct Zgen
 {
     int x, y;
-    Zgen() : x(0), y(0) {}
+    int max_x, max_y;
 
-    int condition() const
+    Zgen() : x(0), y(0), max_x(-1), max_y(-1) {}
+
+    void set_size(int x, int y)
+    {
+        max_x = x;
+        max_y = y;
+    }
+
+    enum direction {
+        dir_right,
+        dir_leftdown,
+        dir_down,
+        dir_right_up,
+        dir_stop,
+    };
+
+    direction prefered_dir = dir_leftdown;
+
+    int condition()
     {
         if ( (x > 0) && (y > 0))
         {
-            // in middle.
-            if ((x + y) & 1)
+            if ((x >= max_x) && (y >= max_y))
             {
-                return 1;
+                return dir_stop;
             }
-            else return 0;
+            else if ( x >= max_x)
+            {
+                if (prefered_dir == dir_right_up)
+                {
+                    prefered_dir = dir_leftdown;
+                    return dir_down;
+                }
+            }
+            else if ( y >= max_x)
+            {
+                if (prefered_dir == dir_leftdown)
+                {
+                    prefered_dir = dir_right_up;
+                    return dir_right;
+                }
+            }
+
+            return prefered_dir;
         }
         else if ( x == 0 && y > 0)
         {
-            if ( y &1)
-                return 2;
-            else
-                return 0;
+            if (prefered_dir == dir_leftdown)
+            {
+                prefered_dir = dir_right_up;
+                if ( y == max_y)
+                {                   
+                    return dir_right;
+                }
+                return dir_down;
+            }
+            return prefered_dir;
         }
         else if ( y == 0 && x > 0)
         {
-            if ( x &1)
-                return 1;
-            else
-                return 3;
+            if (prefered_dir == dir_right_up)
+            {
+                prefered_dir = dir_leftdown;
+                if ( x == max_y)
+                {                   
+                    return dir_down;
+                }
+                return dir_right;
+            }
+            return prefered_dir;
         }
         else if (x == 0 && y == 0)
         {
-            return 3;
+            return dir_right;
         }
-        return 4;
+        return dir_right;
     }
 
     std::pair<int, int> operator()()
@@ -47,21 +94,28 @@ struct Zgen
 
         switch (condition())
         {
-            case 0:
+            case dir_right_up:
                 x ++;
                 y --;
                 break;
-            case 1:
+            case dir_leftdown:
                 x --;
                 y ++;
                 break;
-            case 2:
+            case dir_down:
                 y ++;
-                x = 0;
+                // x = 0;
                 break;
-            case 3:
+            case dir_right:
                 x ++;
-                y = 0;
+                // y = 0;
+                break;
+            case dir_stop:
+                if ((x == 9999999) && (y == 9999999))
+                {
+                    throw std::out_of_range("eof");
+                }
+                x = y = 9999999;
                 break;
         }
 

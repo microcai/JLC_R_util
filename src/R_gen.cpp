@@ -2,33 +2,13 @@
 #include <stdexcept>
 #include "R_gen.hpp"
 
-static const int E24_R[] = {
+static const uint64_t E24_R[] = {
     10,      11,      12,      13,      15,      16,      18,      20,
     22,      24,      27,      30,      33,      36,      39,      43,
     47,      51,      56,      62,      68,      75,      82,      91,
-
-    100,     110,     120,     130,     150,     160,     180,     200,
-    220,     240,     270,     300,     330,     360,     390,     430,
-    470,     510,     560,     620,     680,     750,     820,     910,
-
-    1000,    1100,    1200,    1300,    1500,    1600,    1800,    2000,
-    2200,    2400,    2700,    3000,    3300,    3600,    3900,    4300,
-    4700,    5100,    5600,    6200,    6800,    7500,    8200,    9100,
-
-    10000,   11000,   12000,   13000,   15000,   16000,   18000,   20000,
-    22000,   24000,   27000,   30000,   33000,   36000,   39000,   43000,
-    47000,   51000,   56000,   62000,   68000,   75000,   82000,   91000,
-
-    100000,  110000,  120000,  130000,  150000,  160000,  180000,  200000,
-    220000,  240000,  270000,  300000,  330000,  360000,  390000,  430000,
-    470000,  510000,  560000,  620000,  680000,  750000,  820000,  910000,
-
-    1000000, 1100000, 1200000, 1300000, 1500000, 1600000, 1800000, 2000000,
-    2200000, 2400000, 2700000, 3000000, 3300000, 3600000, 3900000, 4300000,
-    4700000, 5100000, 5600000, 6200000, 6800000, 7500000, 8200000, 9100000,
 };
 
-static const int E96_R[] = {
+static const uint64_t E96_R[] = {
     100,    102,    105,    107,    110,    113,    115,    118,    121,
     124,    127,    130,    133,    137,    140,    143,    147,    150,
     154,    158,    162,    165,    169,    174,    178,    182,    187,
@@ -321,27 +301,60 @@ template <typename T, unsigned S>
 constexpr unsigned array_size(T(&)[S])
 {
     return S;
-} 
+}
 
-Resistance R_lib::operator()(int idx) const
+inline uint64_t tenpow(int pow)
+{
+    uint64_t s = 1;
+    while(pow)
+    {
+        s *=10;
+        pow --;
+    }
+    return s;
+}
+
+int R_lib::get_R_counts() const
 {
     switch (current_type)
     {
         case regular_R:
-            if (idx < array_size(E24_R))
-                return E24_R[idx];
-            else
-                throw std::out_of_range("range out");
+        {
+            return 12*24;
+        }
         case good_R:
-            if (idx < array_size(E96_R))
-                return E96_R[idx];
-            else
-                throw std::out_of_range("range out");
+        {
+            return 13* 96;
+        }
         case free_R:
-            if (idx < array_size(JLC_free))
-                return JLC_free[idx];
-            else
-                throw std::out_of_range("range out");
+            return array_size(JLC_free);
+    }
+    return 0;    
+}
+
+Resistance R_lib::operator()(int idx) const
+{
+    if (idx >= get_R_counts())
+        throw std::out_of_range("range out");
+
+    switch (current_type)
+    {
+        case regular_R:
+        {
+            auto dangci = idx /24;
+            auto dangci_idx = idx % 24;
+
+            return E24_R[dangci_idx] * tenpow(dangci);
+        }
+        case good_R:
+        {
+            auto dangci = idx /96;
+            auto dangci_idx = idx % 96;
+
+            return E96_R[dangci_idx] * tenpow(dangci);
+        }
+        case free_R:
+            return JLC_free[idx];
     }
     return 0;
 }
