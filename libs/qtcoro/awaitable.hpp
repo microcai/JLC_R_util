@@ -19,8 +19,14 @@ struct FinalAwaiter {
     void await_resume() noexcept {}
     std::coroutine_handle<> await_suspend(
         std::coroutine_handle<Promise<T>> h) noexcept {
-        return h.promise().continuation ? h.promise().continuation
-                                        : std::noop_coroutine();
+            if (h.promise().continuation)
+                return h.promise().continuation;
+            else
+            {
+                printf("::holly shit, %p destroyed!\n", h.address());
+                h.destroy();
+                return std::noop_coroutine();
+            }
     }
 };
 
@@ -72,14 +78,15 @@ struct awaitable {
         }
         else
         {
-            printf("::holly shit!\n");
+            printf("::holly shit, %p alive!\n", h.address());
         }
     }
 
     awaitable(awaitable&& t) noexcept : h(t.h) { t.h = nullptr; }
     awaitable& operator=(awaitable&& t) noexcept {
         if (&t != this) {
-            if (h) h.destroy();
+            if (h)
+                h.destroy();
             h = t.h;
             t.h = nullptr;
         }
@@ -167,7 +174,7 @@ public:
     bool await_ready() noexcept { return false; }
 
     void await_suspend(std::coroutine_handle<> handle) {
-        callback_function_([handle = std::move(handle) ]() mutable {handle.resume();});
+        callback_function_(handle);
     }
     void await_resume() noexcept { }
 
@@ -189,6 +196,13 @@ qtcoro::awaitable<void> coro_delay_ms(INT ms)
     {
         QTimer::singleShot(std::chrono::milliseconds(ms), handle);
     });
+}
+
+inline qtcoro::awaitable<void> starter()
+{
+    qtcoro::FinalAwaiter<void> a;
+    
+    co_return;
 }
 
 inline void start_coro(qtcoro::awaitable<void>&& awaitable_coro)
