@@ -10,7 +10,7 @@ struct Zgen
     int x, y;
     int max_x, max_y;
 
-    Zgen() : x(0), y(0), max_x(-1), max_y(-1) {}
+    Zgen() : x(0), y(0), max_x(INT_MAX), max_y(INT_MAX) {}
 
     void set_size(int x, int y)
     {
