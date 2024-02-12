@@ -14,5 +14,10 @@ class MainWindow : public QMainWindow, public Ui_MainWindow
 public:
     MainWindow(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
     ~MainWindow();
+
+public Q_SLOTS:
+    void on_action_About_triggered();
+
+    void on_action_About_Qt_triggered();
 };
 

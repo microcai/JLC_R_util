@@ -44,8 +44,26 @@
      <height>30</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menu_H">
+    <property name="title">
+     <string>帮助(&amp;H)</string>
+    </property>
+    <addaction name="action_About"/>
+    <addaction name="action_About_Qt"/>
+   </widget>
+   <addaction name="menu_H"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="action_About">
+   <property name="text">
+    <string>关于(&amp;A)...</string>
+   </property>
+  </action>
+  <action name="action_About_Qt">
+   <property name="text">
+    <string>关于&amp;Qt...</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>

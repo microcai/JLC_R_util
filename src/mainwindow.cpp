@@ -14,3 +14,12 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 
 MainWindow::~MainWindow(){}
 
+void MainWindow::on_action_About_triggered()
+{
+    QMessageBox::about(this, "关于..", "本工具 DR 出品。");
+}
+
+void MainWindow::on_action_About_Qt_triggered()
+{
+    QMessageBox::aboutQt(this);
+}
