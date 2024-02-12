@@ -69,6 +69,8 @@ qtcoro::awaitable<void> R_select_window::do_calc()
                 }
 
                 row ++;
+                
+                co_await coro_delay_ms(10);
             }           
             
         }
@@ -78,12 +80,16 @@ qtcoro::awaitable<void> R_select_window::do_calc()
     }
 
     tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    
+    
+    begin_calc->setEnabled(true);
 
     co_return;
 }
 
 void R_select_window::on_begin_calc_clicked()
 {
+    begin_calc->setEnabled(false);
     start_coro(do_calc());
 }
 

@@ -23,8 +23,8 @@ struct Resistance
         if (display_text)
             return QString::fromUtf8(display_text);
         if (value<1000)
-            return QString("%1").arg(value);
-        return QString("%1k").arg(value/1000);
+            return QString("%1Ω").arg(value);
+        return QString("%1kΩ").arg(value/1000);
     }
 };
 
