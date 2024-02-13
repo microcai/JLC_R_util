@@ -41,3 +41,5 @@ qt_add_resources(edatool imageresources
     PREFIX "/images"
     FILES res/dcdc.png res/logo.png
 )
+
+install(TARGETS edatool DESTINATION bin)

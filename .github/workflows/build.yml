@@ -1,0 +1,41 @@
+name: build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    # Skip building pull requests from the same repository
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != '${{ github.repository }}'
+    runs-on: windows-2022
+    strategy:
+      fail-fast: false2
+      matrix:
+        os: [windows-2022]
+    env:
+      BUILD_TYPE: Release
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Install ninja-build tool
+      uses: seanmiddleditch/gha-setup-ninja@v3
+
+    - name: Install Static Qt
+      run: |      
+        Invoke-WebRequest https://github.com/microcai/static-build-qt6/releases/download/qt6_660_static_64/qt6_660_static_64.zip -OutFile .\qt6_630_static_64.zip
+        expand-archive -path "qt6_630_static_64.zip"
+
+    - name: Enable Developer Command Prompt
+      uses: ilammy/msvc-dev-cmd@v1.7.0
+
+    - name: Build
+      run: |
+        cmake -G Ninja -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} "-DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/install" -DCMAKE_PREFIX_PATH=qt6_630_static_64 -B build
+        cmake --build build
+        cmake --install build
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: bin-${{ matrix.os }}
+        path: install
