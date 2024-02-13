@@ -15,6 +15,8 @@ include_directories(include)
 include_directories(src)
 include_directories(libs/qtcoro)
 
+add_compile_definitions(-D_ALLOW_COROUTINE_ABI_MISMATCH)
+
 qt_add_executable(edatool 
     src/mainwindow.ui
     src/R_select_window.ui
@@ -30,6 +32,10 @@ qt_add_executable(edatool
     src/main.cpp
     src/R_gen.cpp
 )
+
+# if (MSVC)
+# target_compile_options(edatool PRIVATE "/await")
+# endif()
 
 target_link_libraries(edatool PRIVATE Qt6::Widgets)
 
