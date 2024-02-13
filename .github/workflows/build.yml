@@ -29,7 +29,7 @@ jobs:
 
     - name: Build
       run: |
-        cmake -G Ninja -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} "-DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/install" -DCMAKE_PREFIX_PATH=qt6_630_static_64 -B build
+        cmake -G Ninja -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} "-DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/install" -DCMAKE_PREFIX_PATH=qt6_630_static_64/Qt6_binaries -B build
         cmake --build build
         cmake --install build
 
