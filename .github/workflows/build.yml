@@ -36,5 +36,12 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: bin-${{ matrix.os }}
-        path: install
+        name: eda-tool-win64.zip
+        path: install/bin
+
+    - uses: xresloader/upload-to-github-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        file: "install/bin/*.exe"
+        tags: true
