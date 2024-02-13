@@ -2,10 +2,11 @@ cmake_minimum_required(VERSION 3.10)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-project(minitoolsets CXX)
+cmake_policy(SET CMP0091 NEW)
 
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded")
+
+project(minitoolsets CXX)
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets )
 
@@ -33,9 +34,9 @@ qt_add_executable(edatool
     src/R_gen.cpp
 )
 
-# if (MSVC)
-# target_compile_options(edatool PRIVATE "/await")
-# endif()
+if (MSVC)
+target_compile_options(edatool PRIVATE "/await")
+endif()
 
 target_link_libraries(edatool PRIVATE Qt6::Widgets)
 
