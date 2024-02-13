@@ -34,10 +34,6 @@ qt_add_executable(edatool
     src/R_gen.cpp
 )
 
-if (MSVC)
-target_compile_options(edatool PRIVATE "/await")
-endif()
-
 target_link_libraries(edatool PRIVATE Qt6::Widgets)
 
 set_target_properties(edatool PROPERTIES
