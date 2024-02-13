@@ -15,12 +15,17 @@ include_directories(src)
 include_directories(libs/qtcoro)
 
 qt_add_executable(edatool 
-    src/R_select_window.hpp
-    src/mainwindow.hpp
     src/mainwindow.ui
     src/R_select_window.ui
+    src/I_Calc.ui
+
+    src/R_select_window.hpp
+    src/mainwindow.hpp
+    src/I_Calc.hpp
+
     src/R_select_window.cpp
     src/mainwindow.cpp
+    src/I_Calc.cpp
     src/main.cpp
     src/R_gen.cpp
 )
@@ -34,5 +39,5 @@ set_target_properties(edatool PROPERTIES
 
 qt_add_resources(edatool imageresources
     PREFIX "/images"
-    FILES res/dcdc.png
+    FILES res/dcdc.png res/logo.png
 )

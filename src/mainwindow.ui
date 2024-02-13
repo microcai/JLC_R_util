@@ -24,9 +24,8 @@
        <attribute name="title">
         <string notr="true">电阻选型工具</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_5"/>
       </widget>
-      <widget class="QWidget" name="tab_2">
+      <widget class="I_Calc" name="tab_2">
        <attribute name="title">
         <string>电感快速选型</string>
        </attribute>
@@ -70,6 +69,12 @@
    <class>R_select_window</class>
    <extends>QWidget</extends>
    <header>R_select_window.hpp</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>I_Calc</class>
+   <extends>QWidget</extends>
+   <header>I_Calc.hpp</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
