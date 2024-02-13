@@ -20,7 +20,7 @@ jobs:
       uses: seanmiddleditch/gha-setup-ninja@v3
 
     - name: Install Static Qt
-      run: |      
+      run: |
         Invoke-WebRequest https://github.com/microcai/static-build-qt6/releases/download/qt6_660_static_64/qt6_660_static_64.zip -OutFile .\qt6_630_static_64.zip
         expand-archive -path "qt6_630_static_64.zip"
 
