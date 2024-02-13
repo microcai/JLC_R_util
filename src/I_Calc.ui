@@ -7,17 +7,40 @@
     <x>0</x>
     <y>0</y>
     <width>387</width>
-    <height>461</height>
+    <height>370</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Icalc</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout" columnstretch="1,0,0,3">
+  <layout class="QGridLayout" name="gridLayout" columnstretch="1,0,0,0">
+   <item row="3" column="1">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>输出电流</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" rowspan="4">
+    <spacer name="horizontalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
    <item row="0" column="2">
     <widget class="QDoubleSpinBox" name="Vin">
      <property name="suffix">
       <string>V</string>
+     </property>
+     <property name="value">
+      <double>24.000000000000000</double>
      </property>
     </widget>
    </item>
@@ -31,13 +54,32 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
-    <widget class="QLabel" name="label_4">
-     <property name="text">
-      <string>纹波：</string>
+   <item row="0" column="3" rowspan="3">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="2">
+    <widget class="QDoubleSpinBox" name="Iout">
+     <property name="suffix">
+      <string>A</string>
+     </property>
+     <property name="decimals">
+      <number>3</number>
+     </property>
+     <property name="singleStep">
+      <double>0.100000000000000</double>
+     </property>
+     <property name="value">
+      <double>1.000000000000000</double>
      </property>
     </widget>
    </item>
@@ -53,8 +95,14 @@
    </item>
    <item row="1" column="2">
     <widget class="QDoubleSpinBox" name="Vout">
+     <property name="correctionMode">
+      <enum>QAbstractSpinBox::CorrectToPreviousValue</enum>
+     </property>
      <property name="suffix">
       <string>V</string>
+     </property>
+     <property name="value">
+      <double>12.000000000000000</double>
      </property>
     </widget>
    </item>
@@ -68,15 +116,41 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="2">
-    <widget class="QDoubleSpinBox" name="delta">
+   <item row="6" column="0" colspan="4">
+    <widget class="QPushButton" name="begin_calc">
+     <property name="text">
+      <string>计算</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="2">
+    <widget class="QDoubleSpinBox" name="Kind">
      <property name="suffix">
       <string/>
+     </property>
+     <property name="singleStep">
+      <double>0.100000000000000</double>
+     </property>
+     <property name="value">
+      <double>0.200000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>纹波：</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
    <item row="2" column="2">
     <widget class="QSpinBox" name="Fsw">
+     <property name="correctionMode">
+      <enum>QAbstractSpinBox::CorrectToNearestValue</enum>
+     </property>
      <property name="suffix">
       <string>Hz</string>
      </property>
@@ -86,58 +160,65 @@
      <property name="maximum">
       <number>99999999</number>
      </property>
+     <property name="singleStep">
+      <number>100</number>
+     </property>
      <property name="stepType">
       <enum>QAbstractSpinBox::AdaptiveDecimalStepType</enum>
      </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <spacer name="horizontalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="0" column="3">
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="4" column="0" colspan="4">
-    <widget class="QPushButton" name="begin_calc">
-     <property name="text">
-      <string>计算</string>
+     <property name="value">
+      <number>300000</number>
      </property>
     </widget>
    </item>
-   <item row="5" column="0" colspan="4">
-    <widget class="QGroupBox" name="resultbox">
-     <property name="title">
-      <string>计算结果：</string>
+   <item row="7" column="0" colspan="4">
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
       <item>
-       <widget class="QTableWidget" name="tableWidget"/>
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>最低电感量：</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="result">
+        <property name="minimumSize">
+         <size>
+          <width>30</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>Vin</tabstop>
+  <tabstop>Vout</tabstop>
+  <tabstop>Fsw</tabstop>
+  <tabstop>Iout</tabstop>
+  <tabstop>Kind</tabstop>
+  <tabstop>begin_calc</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

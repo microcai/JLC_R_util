@@ -17,16 +17,18 @@ template <typename T>
 struct FinalAwaiter {
     bool await_ready() noexcept { return false; }
     void await_resume() noexcept {}
-    std::coroutine_handle<> await_suspend(
-        std::coroutine_handle<Promise<T>> h) noexcept {
-            if (h.promise().continuation)
-                return h.promise().continuation;
-            else
-            {
-                printf("::holly shit, %p destroyed!\n", h.address());
-                h.destroy();
-                return std::noop_coroutine();
-            }
+    std::coroutine_handle<> await_suspend(std::coroutine_handle<Promise<T>> h) noexcept
+    {
+        if (h.promise().continuation)
+        {
+            return h.promise().continuation;
+        }
+        else
+        {
+            printf("::holly shit, %p destroyed!\n", h.address());
+            h.destroy();
+            return std::noop_coroutine();
+        }
     }
 };
 
