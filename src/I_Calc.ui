@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Icalc</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout" columnstretch="1,0,0,0">
+  <layout class="QGridLayout" name="gridLayout" columnstretch="1,0,0,3">
    <item row="3" column="1">
     <widget class="QLabel" name="label_5">
      <property name="text">
