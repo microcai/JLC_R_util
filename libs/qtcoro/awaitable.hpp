@@ -7,6 +7,17 @@
 
 namespace qtcoro
 {
+
+template <typename T>
+void delete_later(std::coroutine_handle<T> h) noexcept
+{
+    QTimer::singleShot(std::chrono::milliseconds(0), [h=std::move(h)]() mutable
+    {
+        printf("::holly shit, %p destroyed!\n", h.address());
+        h.destroy();
+    });
+}
+
 template <typename T>
 struct awaitable;
 
@@ -25,8 +36,7 @@ struct FinalAwaiter {
         }
         else
         {
-            printf("::holly shit, %p destroyed!\n", h.address());
-            h.destroy();
+            delete_later(h);
             return std::noop_coroutine();
         }
     }
