@@ -4,6 +4,7 @@ on: workflow_dispatch
 
 jobs:
   release:
+    permissions: write-all
     # Skip building pull requests from the same repository
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != '${{ github.repository }}'
     runs-on: windows-2022
