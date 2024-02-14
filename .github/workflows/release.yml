@@ -33,8 +33,13 @@ jobs:
         cmake -G Ninja -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} "-DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/install" -DCMAKE_PREFIX_PATH=qt6_630_static_64/Qt6_binaries -B build
         cmake --build build
         cmake --install build
+    - name: zip the result
+      run: |
+        cd install
+        cd bin
+        7z a eda-tool-win64.zip edatool.exe
 
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
-        files: install/bin/edatool.exe
+        files: install/bin/eda-tool-win64.zip
