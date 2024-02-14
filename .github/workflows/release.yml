@@ -3,7 +3,7 @@ name: build
 on: workflow_dispatch
 
 jobs:
-  build:
+  release:
     # Skip building pull requests from the same repository
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != '${{ github.repository }}'
     runs-on: windows-2022
