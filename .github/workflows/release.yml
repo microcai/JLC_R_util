@@ -22,15 +22,15 @@ jobs:
 
     - name: Install Static Qt
       run: |
-        Invoke-WebRequest https://github.com/microcai/static-build-qt6/releases/download/qt6_660_static_64/qt6_660_static_64.zip -OutFile .\qt6_630_static_64.zip
-        expand-archive -path "qt6_630_static_64.zip"
+        Invoke-WebRequest https://github.com/microcai/static-build-qt6/releases/download/qt6_661_static_64/qt6_661_static_64.zip -OutFile .\qt6_661_static_64.zip
+        expand-archive -path "qt6_661_static_64.zip"
 
     - name: Enable Developer Command Prompt
       uses: ilammy/msvc-dev-cmd@v1.7.0
 
     - name: Build
       run: |
-        cmake -G Ninja -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} "-DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/install" -DCMAKE_PREFIX_PATH=qt6_630_static_64/Qt6_binaries -B build
+        cmake -G Ninja -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} "-DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/install" -DCMAKE_PREFIX_PATH=qt6_661_static_64/Qt6_binaries -B build
         cmake --build build
         cmake --install build
     - name: zip the result
