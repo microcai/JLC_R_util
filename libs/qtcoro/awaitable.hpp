@@ -34,11 +34,11 @@ struct FinalAwaiter {
         {
             return h.promise().continuation;
         }
-        else
+        else if (h.promise().final_need_clean_up)
         {
             delete_later(h);
-            return std::noop_coroutine();
         }
+        return std::noop_coroutine();
     }
 };
 
@@ -46,6 +46,7 @@ struct FinalAwaiter {
 template <typename T>
 struct Promise {
     std::coroutine_handle<> continuation;
+    bool final_need_clean_up = false;
     T value;                       // 用于存储协程返回的值
 
     awaitable<T> get_return_object();
@@ -61,6 +62,7 @@ struct Promise {
 template <>
 struct Promise<void> {
     std::coroutine_handle<> continuation;
+    bool final_need_clean_up = false;
 
     awaitable<void> get_return_object();
 
@@ -90,6 +92,7 @@ struct awaitable {
         }
         else
         {
+            h.promise().final_need_clean_up = true;
             printf("::holly shit, %p alive!\n", h.address());
         }
     }
