@@ -30,13 +30,13 @@ struct FinalAwaiter {
     void await_resume() noexcept {}
     std::coroutine_handle<> await_suspend(std::coroutine_handle<Promise<T>> h) noexcept
     {
+        if (h.promise().final_need_clean_up)
+        {
+            delete_later(h);
+        }
         if (h.promise().continuation)
         {
             return h.promise().continuation;
-        }
-        else if (h.promise().final_need_clean_up)
-        {
-            delete_later(h);
         }
         return std::noop_coroutine();
     }
