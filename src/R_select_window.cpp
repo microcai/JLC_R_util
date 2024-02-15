@@ -84,8 +84,13 @@ qtcoro::awaitable<void> R_select_window::do_calc()
 
                 result_box->setTitle(QString("计算结果： %1 个").arg(row));
                 
-                co_await coro_delay_ms(0);
-            }           
+                
+            }
+            else if (c % 1000)
+            {
+                co_await coro_delay_ms(0);            
+            }
+
             printf("tryed (%d, %d) [row %d], try count = %d\n" , Zidx.first, Zidx.second, row, c);
         }
     }catch(const std::out_of_range&)

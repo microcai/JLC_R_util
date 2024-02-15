@@ -39,6 +39,9 @@
      <property name="suffix">
       <string>V</string>
      </property>
+     <property name="maximum">
+      <double>999.000000000000000</double>
+     </property>
      <property name="value">
       <double>24.000000000000000</double>
      </property>
