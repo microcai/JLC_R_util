@@ -25,9 +25,19 @@ struct Resistance
         if (value<1000)
             return QString("%1Ω").arg(value);
         if (value<1000000)
-            return QString("%1kΩ").arg(value/1000);
+        {
+            if (value / 1000 * 1000 == value)
+                return QString("%1kΩ").arg(value/1000);
+            else
+                return QString("%1kΩ").arg(value/1000.0f);
+        }
         if (value<1000000000)
-            return QString("%1MΩ").arg(value/1000000);
+        {
+            if (value / 1000000 * 1000000 == value)
+                return QString("%1kΩ").arg(value/1000);
+            else
+                return QString("%1MΩ").arg(value/1000000);
+        }
         return QString("%1MΩ").arg(value/1000000);
     }
 };

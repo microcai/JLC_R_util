@@ -64,7 +64,7 @@ qtcoro::awaitable<void> R_select_window::do_calc()
             auto R1 = r(Zidx.first);
             auto R2 = r(Zidx.second);
 
-            auto Vout_calculated = Vref * (static_cast<double>(R1) + static_cast<double>(R2)) / static_cast<double>(R2);
+            const double Vout_calculated = Vref * (static_cast<double>(R1) + static_cast<double>(R2)) / static_cast<double>(R2);
             auto Err = Vout_calculated / Vout - 1;
 
             if (((Vout_calculated / Vout) >= accuracy.first) && ( (Vout_calculated / Vout) <= accuracy.second ))
@@ -83,12 +83,12 @@ qtcoro::awaitable<void> R_select_window::do_calc()
                 row ++;
 
                 result_box->setTitle(QString("计算结果： %1 个").arg(row));
-                
-                
+
+
             }
             else if (c % 1000)
             {
-                co_await coro_delay_ms(0);            
+                co_await coro_delay_ms(0);
             }
 
             printf("tryed (%d, %d) [row %d], try count = %d\n" , Zidx.first, Zidx.second, row, c);
@@ -99,8 +99,8 @@ qtcoro::awaitable<void> R_select_window::do_calc()
     }
 
     tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    
-    
+
+
     begin_calc->setEnabled(true);
 
     co_return;
@@ -114,6 +114,6 @@ void R_select_window::on_begin_calc_clicked()
 
 void R_select_window::check_caculatable()
 {
-    
+
 }
 
