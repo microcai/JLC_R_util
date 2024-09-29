@@ -26,13 +26,6 @@ namespace qtcoro
 		};
 	};
 
-
-	// inline std::coroutine_handle<>
-	// corotine_context_cleanup_awaiter::await_suspend(std::coroutine_handle<coroutine_context_promise> h) noexcept
-	// {
-
-	// }
-
 	template <typename T>
 	struct awaitable;
 
@@ -244,13 +237,6 @@ qtcoro::awaitable<int> coro_delay_ms(INT ms)
 	co_await callback_awaitable<void>([ms](auto handle) { QTimer::singleShot(std::chrono::milliseconds(ms), handle); });
 	co_return ms;
 }
-
-// inline qtcoro::DetachedCoroutine coro_wapper_func(qtcoro::awaitable<void> awaitable_coro)
-// {
-// 	co_await callback_awaitable<void>([](auto handle) { QTimer::singleShot(std::chrono::milliseconds(0), handle); });
-// 	co_await awaitable_coro;
-// 	co_return;
-// }
 
 inline void start_coro(qtcoro::awaitable<void>&& awaitable_coro)
 {
