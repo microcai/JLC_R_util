@@ -1,4 +1,5 @@
 
+#include <chrono>
 #include "R_select_window.hpp"
 #include <QMessageBox>
 #include "awaitable.hpp"
@@ -57,6 +58,8 @@ qtcoro::awaitable<void> R_select_window::do_calc()
 
     try
     {
+        std::chrono::steady_clock::time_point ecliped_time = std::chrono::steady_clock::now();
+
         for(int c = 1;;c++)
         {
             Zidx = z();
@@ -86,12 +89,19 @@ qtcoro::awaitable<void> R_select_window::do_calc()
 
 
             }
-            else if (c % 1000)
+
+            if ( (std::chrono::steady_clock::now() - ecliped_time) > std::chrono::milliseconds(2) )
             {
-                co_await coro_delay_ms(0);
+                printf("tryed (%d, %d) [row %d], try count = %d, and preempt fiber\n" , Zidx.first, Zidx.second, row, c);
+                    co_await coro_delay_ms(0);
+                ecliped_time =  std::chrono::steady_clock::now();
+            }
+            else
+            {
+                printf("tryed (%d, %d) [row %d], try count = %d\n" , Zidx.first, Zidx.second, row, c);
+
             }
 
-            printf("tryed (%d, %d) [row %d], try count = %d\n" , Zidx.first, Zidx.second, row, c);
         }
     }catch(const std::out_of_range&)
     {
