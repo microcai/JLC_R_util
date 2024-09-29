@@ -7,18 +7,6 @@
 
 namespace qtcoro
 {
-
-	template <typename T>
-	void delete_later(std::coroutine_handle<T> h) noexcept
-	{
-		QTimer::singleShot(std::chrono::milliseconds(0),
-			[h = std::move(h)]() mutable
-			{
-				printf("::holly shit, %p destroyed!\n", h.address());
-				h.destroy();
-			});
-	}
-
 	struct coroutine_context;
 	struct coroutine_context_promise;
 	struct corotine_context_cleanup_awaiter
