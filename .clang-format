@@ -2,7 +2,7 @@
 Language: Cpp
 BasedOnStyle: WebKit
 
-Standard: Cpp11
+Standard: LS_Latest
 
 ColumnLimit: '120'
 UseTab: Always
