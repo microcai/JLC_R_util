@@ -7,52 +7,51 @@
 
 namespace qtcoro
 {
-	struct coroutine_context;
-	struct coroutine_context_promise;
-	struct corotine_context_cleanup_awaiter
-	{
-		bool await_ready() noexcept { return false; }
-		void await_resume() noexcept { }
-		std::coroutine_handle<> await_suspend(std::coroutine_handle<coroutine_context_promise> h) noexcept
-		{
-			printf("::holly shit, %p destroyed!\n", h.address());
-			h.destroy();
-			return std::noop_coroutine();
-		}
-	};
-
-	struct coroutine_context_promise
-	{
-		coroutine_context get_return_object();
-
-		auto initial_suspend() { return std::suspend_always{}; }
-
-		auto final_suspend() noexcept { return corotine_context_cleanup_awaiter{}; }
-
-		void unhandled_exception() { }
-
-		void return_void() { }
-	};
-
 	// 协程包装...
-	struct coroutine_context
+	struct DetachedCoroutine
 	{
-		using promise_type = coroutine_context_promise;
+		struct promise_type
+		{
+			DetachedCoroutine get_return_object()
+			{
+				return DetachedCoroutine{ std::coroutine_handle<promise_type>::from_promise(*this) };
+			}
 
-		coroutine_context(std::coroutine_handle<promise_type> h)
+			auto initial_suspend() { return std::suspend_always{}; }
+
+			auto final_suspend() noexcept { return corotine_context_cleanup_awaiter{}; }
+
+			void unhandled_exception() { }
+
+			void return_void() { }
+		};
+
+		struct corotine_context_cleanup_awaiter
+		{
+			bool await_ready() noexcept { return false; }
+			void await_resume() noexcept { }
+			std::coroutine_handle<> await_suspend(std::coroutine_handle<promise_type> h) noexcept
+			{
+				printf("::holly shit, %p destroyed!\n", h.address());
+				h.destroy();
+				return std::noop_coroutine();
+			}
+		};
+
+		DetachedCoroutine(std::coroutine_handle<promise_type> h)
 			: current_coro_handle_(h)
 		{
 		}
 
-		~coroutine_context() { }
+		~DetachedCoroutine() { }
 
-		coroutine_context(coroutine_context&& t) noexcept
+		DetachedCoroutine(DetachedCoroutine&& t) noexcept
 			: current_coro_handle_(t.current_coro_handle_)
 		{
 			t.current_coro_handle_ = nullptr;
 		}
 
-		coroutine_context& operator=(coroutine_context&& t) noexcept
+		DetachedCoroutine& operator=(DetachedCoroutine&& t) noexcept
 		{
 			if (&t != this)
 			{
@@ -64,8 +63,8 @@ namespace qtcoro
 			return *this;
 		}
 
-		coroutine_context(const coroutine_context&)			   = delete;
-		coroutine_context& operator=(const coroutine_context&) = delete;
+		DetachedCoroutine(const DetachedCoroutine&)			   = delete;
+		DetachedCoroutine& operator=(const DetachedCoroutine&) = delete;
 
 		void shedule() { current_coro_handle_.resume(); }
 
@@ -78,10 +77,6 @@ namespace qtcoro
 		std::coroutine_handle<promise_type> current_coro_handle_;
 	};
 
-	inline coroutine_context coroutine_context_promise::get_return_object()
-	{
-		return coroutine_context{ std::coroutine_handle<coroutine_context_promise>::from_promise(*this) };
-	}
 
 	// inline std::coroutine_handle<>
 	// corotine_context_cleanup_awaiter::await_suspend(std::coroutine_handle<coroutine_context_promise> h) noexcept
@@ -292,7 +287,7 @@ qtcoro::awaitable<int> coro_delay_ms(INT ms)
 	co_return ms;
 }
 
-inline qtcoro::coroutine_context coro_wapper_func(qtcoro::awaitable<void> awaitable_coro)
+inline qtcoro::DetachedCoroutine coro_wapper_func(qtcoro::awaitable<void> awaitable_coro)
 {
 	co_await callback_awaitable<void>([](auto handle) { QTimer::singleShot(std::chrono::milliseconds(0), handle); });
 	co_await awaitable_coro;
@@ -304,7 +299,7 @@ inline void start_coro(qtcoro::awaitable<void>&& awaitable_coro)
 	QTimer::singleShot(std::chrono::milliseconds(0),
 		[awaitable_coro = std::move(awaitable_coro)]() mutable
 		{
-			qtcoro::coroutine_context coro_wapper = coro_wapper_func(std::move(awaitable_coro));
+			qtcoro::DetachedCoroutine coro_wapper = coro_wapper_func(std::move(awaitable_coro));
 			coro_wapper.shedule();
 		});
 }
