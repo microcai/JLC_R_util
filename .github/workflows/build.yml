@@ -19,7 +19,15 @@ jobs:
     - name: Install ninja-build tool
       uses: seanmiddleditch/gha-setup-ninja@v5
 
+    - name: Cache Qt Install
+      id: cache-qt6
+      uses: actions/cache@v4
+      with:
+        path: qt6_673_static_64
+        key: ${{ runner.os }}-qt6_673_static_64
+
     - name: Install Static Qt
+      if: steps.cache-qt6.outputs.cache-hit != 'true'
       run: |
         Invoke-WebRequest https://github.com/microcai/static-build-qt6/releases/download/qt6_673_static_64/qt6_673_static_64.zip -OutFile .\qt6_673_static_64.zip
         expand-archive -path "qt6_673_static_64.zip"
