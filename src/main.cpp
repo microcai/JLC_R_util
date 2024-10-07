@@ -34,11 +34,12 @@ int main(int argc, char* argv[])
             desktopfile.write(QString("Exec=%1\n").arg(app.applicationFilePath()).toUtf8());
         }
         desktopfile.close();
+
+        app.setDesktopFileName("edatool");
     }
 
     QIcon ico(":/images/res/logo.png");
     app.setWindowIcon(ico);
-    app.setDesktopFileName("edatool.desktop");
 
     MainWindow mywin;
 
