@@ -10,7 +10,7 @@ Icon=edatool
 Name=JLC EDA Tool
 Type=Application
 StartupWMClass=edatool
-)ss";
+Exec=)ss";
 
 int main(int argc, char* argv[])
 {
@@ -30,8 +30,10 @@ int main(int argc, char* argv[])
         QFile desktopfile(QDir::homePath() + "/.local/share/applications/edatool.desktop");
         if (desktopfile.open(QIODeviceBase::ReadWrite))
         {
+            desktopfile.resize(sizeof (desktop_file_content));
             desktopfile.write(desktop_file_content, sizeof (desktop_file_content) - 1);
-            desktopfile.write(QString("Exec=%1\n").arg(app.applicationFilePath()).toUtf8());
+            desktopfile.write(app.applicationFilePath().toUtf8());
+            desktopfile.write("\n", 1);
         }
         desktopfile.close();
 
