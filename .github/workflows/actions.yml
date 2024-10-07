@@ -1,0 +1,119 @@
+name: auto-builds
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  build:
+    # Skip building pull requests from the same repository
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != '${{ github.repository }}'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-latest]
+        build_type: [Release]
+        c_compiler: [clang, cl]
+        include:
+          - os: windows-latest
+            c_compiler: cl
+            cpp_compiler: cl
+          - os: ubuntu-24.04
+            c_compiler: clang
+            cpp_compiler: clang++
+        exclude:
+          - os: windows-latest
+            c_compiler: clang
+          - os: ubuntu-24.04
+            c_compiler: cl
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Install ninja-build tool
+      uses: seanmiddleditch/gha-setup-ninja@v5
+
+    - name: Cache Static Qt Install
+      id: cache-qt6
+      if: startsWith(runner.os, 'Windows')
+      uses: actions/cache@v4
+      with:
+        path: qt6_673_static_64
+        key: ${{ runner.os }}-qt6_673_static_64
+
+    - name: Install Static Qt
+      if: startsWith(runner.os, 'Windows') && (steps.cache-qt6.outputs.cache-hit != 'true')
+      run: |
+        Invoke-WebRequest https://github.com/microcai/static-build-qt6/releases/download/qt6_673_static_64/qt6_673_static_64.zip -OutFile .\qt6_673_static_64.zip
+        expand-archive -path "qt6_673_static_64.zip"
+
+    - name: setup env for cmake to pickup QT
+      id: qt6-install
+      if: startsWith(runner.os, 'Windows')
+      shell: bash
+      run: |
+        echo "QT_ROOT_DIR=${{ github.workspace }}/qt6_673_static_64/Qt6_binaries" >> $GITHUB_ENV
+        echo "QT_PLUGIN_PATH=${{ github.workspace }}/qt6_673_static_64/Qt6_binaries/plugins" >> $GITHUB_ENV
+        echo "qt_root_dir=${{ github.workspace }}/qt6_673_static_64/Qt6_binaries" >> $GITHUB_OUTPUT
+        echo "qt_plugin_dir=${{ github.workspace }}/qt6_673_static_64/Qt6_binaries/plugins" >> $GITHUB_OUTPUT
+        echo "CMAKE_PREFIX_PATH=${{ github.workspace }}/qt6_673_static_64/Qt6_binaries" >> $GITHUB_ENV
+
+    - name: setup env for cmake to pickup Clang
+      if: startsWith(runner.os, 'Linux')
+      shell: bash
+      run: |
+        echo "CC=${{ matrix.c_compiler }}" >> $GITHUB_ENV
+        echo "CXX=${{ matrix.cpp_compiler }}" >> $GITHUB_ENV
+
+    - name: Install System Qt
+      if: startsWith(runner.os, 'Linux')
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y qt6-.+-dev
+
+    - name: Enable Developer Command Prompt
+      if: startsWith(runner.os, 'Windows')
+      uses: ilammy/msvc-dev-cmd@v1.13.0
+
+    - name: Configure Sources
+      run: >
+        cmake -G Ninja
+        -S ${{ github.workspace }}
+        -B ${{ github.workspace }}/build
+        -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+        -DCMAKE_INSTALL_PREFIX="${{ github.workspace }}/install"
+
+    - name: Build Souces
+      run: cmake --build ${{ github.workspace }}/build
+    - name: Install Result
+      run: cmake --install ${{ github.workspace }}/build
+
+    - name: zip the result elf
+      if: startsWith(runner.os, 'Linux')
+      run: |
+        cd install/bin
+        7z a eda-tool-linux.zip edatool
+
+    - name: zip the result exe
+      if: startsWith(runner.os, 'Windows')
+      run: |
+        cd install/bin
+        7z a eda-tool-win64.zip edatool.exe
+
+    - name: upload exe Release
+      if: startsWith(github.ref, 'refs/tags/') && startsWith(runner.os, 'Windows')
+      uses: softprops/action-gh-release@v2
+      with:
+        files: install/bin/eda-tool-win64.zip
+
+    - name: upload linux Release
+      if: startsWith(github.ref, 'refs/tags/') && startsWith(runner.os, 'Linux')
+      uses: softprops/action-gh-release@v2
+      with:
+        files: install/bin/eda-tool-linux.zip
+
+    - name: Upload generic artifacts
+      uses: actions/upload-artifact@v4.4.0
+      with:
+        name: eda-tool-${{ runner.os }}
+        path: install/bin
