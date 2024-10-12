@@ -38,25 +38,22 @@ jobs:
       if: startsWith(runner.os, 'Windows')
       uses: actions/cache@v4
       with:
-        path: qt6-binary
-        key: ${{ runner.os }}-qt6-win64-vc2022-static
+        path: msvc-qt
+        key: qt6-win64-vc2022-static
 
     - name: Install Static Qt
       if: startsWith(runner.os, 'Windows') && (steps.cache-qt6.outputs.cache-hit != 'true')
       run: |
-        Invoke-WebRequest https://github.com/microcai/static-build-qt6/releases/download/qt6_680_msvc2022_x64/qt6_680_win64_vc2022_static.zip -OutFile .\qt6-binary.zip
-        expand-archive -path "qt6-binary.zip"
+        Invoke-WebRequest https://github.com/microcai/static-build-qt6/releases/download/qt6_680_msvc/qt6_680_win64-msvc2022_static.zip -OutFile .\msvc-qt.zip
+        expand-archive -path "msvc-qt.zip"
 
     - name: setup env for cmake to pickup QT
-      id: qt6-install
       if: startsWith(runner.os, 'Windows')
       shell: bash
       run: |
-        echo "QT_ROOT_DIR=${{ github.workspace }}/qt6-binary/qt6-win64-vc2022-static" >> $GITHUB_ENV
-        echo "QT_PLUGIN_PATH=${{ github.workspace }}/qt6-binary/qt6-win64-vc2022-static/plugins" >> $GITHUB_ENV
-        echo "qt_root_dir=${{ github.workspace }}/qt6-binary/qt6-win64-vc2022-static" >> $GITHUB_OUTPUT
-        echo "qt_plugin_dir=${{ github.workspace }}/qt6-binary/qt6-win64-vc2022-static/plugins" >> $GITHUB_OUTPUT
-        echo "CMAKE_PREFIX_PATH=${{ github.workspace }}/qt6-binary/qt6-win64-vc2022-static" >> $GITHUB_ENV
+        echo "QT_ROOT_DIR=${{ github.workspace }}\\msvc-qt" >> $GITHUB_ENV
+        echo "QT_PLUGIN_PATH=${{ github.workspace }}\\msvc-qt\\plugins" >> $GITHUB_ENV
+        echo "CMAKE_PREFIX_PATH=${{ github.workspace }}\\msvc-qt" >> $GITHUB_ENV
 
     - name: setup env for cmake to pickup Clang
       if: startsWith(runner.os, 'Linux')
