@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include "ui_I_Calc.h"
-#include "awaitable.hpp"
+#include "qtcoro.hpp"
 
 class I_Calc : public QWidget, Ui_I_Calc
 {

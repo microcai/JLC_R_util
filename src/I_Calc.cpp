@@ -1,7 +1,7 @@
 
 #include "I_Calc.hpp"
 #include <QMessageBox>
-#include "awaitable.hpp"
+#include "qtcoro.hpp"
 #include "R_gen.hpp"
 #include "z_gen.hpp"
 
@@ -35,7 +35,7 @@ qtcoro::awaitable<void> I_Calc::do_calc()
 void I_Calc::on_begin_calc_clicked()
 {
     begin_calc->setEnabled(false);
-    start_coro(do_calc());
+    qtcoro::coro_start(do_calc());
 }
 
 void I_Calc::check_caculatable()

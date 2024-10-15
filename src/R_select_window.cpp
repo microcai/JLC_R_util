@@ -2,7 +2,7 @@
 #include <chrono>
 #include "R_select_window.hpp"
 #include <QMessageBox>
-#include "awaitable.hpp"
+#include "qtcoro.hpp"
 #include "R_gen.hpp"
 #include "z_gen.hpp"
 
@@ -92,13 +92,13 @@ qtcoro::awaitable<void> R_select_window::do_calc()
 
             if ( (std::chrono::steady_clock::now() - ecliped_time) > std::chrono::milliseconds(2) )
             {
-                printf("tryed (%d, %d) [row %d], try count = %d, and preempt fiber\n" , Zidx.first, Zidx.second, row, c);
-                    co_await coro_delay_ms(0);
+                // printf("tryed (%d, %d) [row %d], try count = %d, and preempt fiber\n" , Zidx.first, Zidx.second, row, c);
+                co_await qtcoro::coro_delay_ms(0);
                 ecliped_time =  std::chrono::steady_clock::now();
             }
             else
             {
-                printf("tryed (%d, %d) [row %d], try count = %d\n" , Zidx.first, Zidx.second, row, c);
+                // printf("tryed (%d, %d) [row %d], try count = %d\n" , Zidx.first, Zidx.second, row, c);
 
             }
 
@@ -119,7 +119,7 @@ qtcoro::awaitable<void> R_select_window::do_calc()
 void R_select_window::on_begin_calc_clicked()
 {
     begin_calc->setEnabled(false);
-    start_coro(do_calc());
+    qtcoro::coro_start(do_calc());
 }
 
 void R_select_window::check_caculatable()

@@ -1,5 +1,7 @@
 
 #include <QApplication>
+#include <QFile>
+#include <QDir>
 #include "mainwindow.hpp"
 #include <QDebug>
 
