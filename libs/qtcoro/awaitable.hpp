@@ -85,7 +85,7 @@ namespace qtcoro
 				promise_type* this_;
 			};
 
-			auto initial_suspend() noexcept { return std::suspend_never{}; }
+			constexpr auto initial_suspend() noexcept { return std::suspend_always{}; }
 			auto final_suspend() noexcept { return joiner_job{this}; }
 
 			void unhandled_exception() { }
@@ -113,6 +113,7 @@ namespace qtcoro
 				}
 				else
 				{
+					std::coroutine_handle<promise_type>::from_promise(*promise).resume();
 					promise->no_owner = true;
 				}
 			}
