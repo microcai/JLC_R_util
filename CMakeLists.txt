@@ -8,6 +8,10 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 project(minitoolsets CXX)
 
+if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+    add_compile_options(-foptimize-sibling-calls)
+endif()
+
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets )
 
 qt_standard_project_setup()
