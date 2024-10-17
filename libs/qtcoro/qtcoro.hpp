@@ -160,12 +160,14 @@ namespace qtcoro
             explicit QPrivateSignal() = default;
         };
 
-    public slots:
-        void call()
+    public:
+        inline void call()
         {
-            deleteLater();
+            if (auto_delete)
+                deleteLater();
             func();
         }
+        bool auto_delete { true };
     public:
 
         MyCallableQObject(Func&& f) : func(std::forward<Func>(f)){}
