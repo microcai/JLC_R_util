@@ -2,8 +2,6 @@
 Language: Cpp
 BasedOnStyle: WebKit
 
-Standard: LS_Latest
-
 ColumnLimit: '120'
 UseTab: Always
 TabWidth: '4'
