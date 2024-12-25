@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.30)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-cmake_policy(SET CMP0091 NEW)
+# cmake_policy(SET CMP0091 NEW)
 
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
@@ -11,6 +11,11 @@ project(minitoolsets CXX)
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
     add_compile_options(-foptimize-sibling-calls)
 endif()
+
+if (MSVC)
+    add_link_options(/NODEFAULTLIB:libucrt$<$<CONFIG:Debug>:d>.lib)
+    link_libraries(ucrt$<$<CONFIG:Debug>:d>.lib)
+endif(MSVC)
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets )
 
@@ -37,6 +42,11 @@ qt_add_executable(edatool
 )
 
 target_link_libraries(edatool PRIVATE Qt6::Widgets)
+
+if (MSVC)
+target_link_options(edatool PRIVATE "/NODEFAULTLIB")
+target_link_libraries(edatool PRIVATE ucrt$<$<CONFIG:Debug>:d>.lib msvcrt.lib libvcruntime.lib libcpmt$<$<CONFIG:Debug>:d>.lib)
+endif()
 
 set_target_properties(edatool PROPERTIES
     WIN32_EXECUTABLE ON
