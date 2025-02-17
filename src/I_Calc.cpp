@@ -17,11 +17,11 @@ qtcoro::awaitable<void> I_Calc::do_calc()
 {
     auto Vout = this->Vout->value();
     auto Vin = this->Vin->value();
-    auto Fsw = this->Fsw->value();
+    auto Fsw = this->Fsw->value() * 1000;
     auto Iout = this->Iout->value();
-    auto Kind = this->Kind->value();
+    auto Ripple = this->Kind->value();
 
-    auto Lmin =  Vout * (Vin - Vout) / (Vin * Kind * Iout * Fsw);
+    auto Lmin =  Vout * (Vin - Vout) / (Vin * Ripple * Iout * Fsw);
 
     auto row = 0;
 

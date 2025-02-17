@@ -30,7 +30,12 @@
         <string>电感快速选型</string>
        </attribute>
       </widget>
-     </widget>
+      <widget class="LLC_window" name="tab_3">
+       <attribute name="title">
+        <string>LLC计算</string>
+       </attribute>
+      </widget>
+    </widget>
     </item>
    </layout>
   </widget>
@@ -75,6 +80,12 @@
    <class>I_Calc</class>
    <extends>QWidget</extends>
    <header>I_Calc.hpp</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>LLC_window</class>
+   <extends>QWidget</extends>
+   <header>LLC_window.hpp</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
