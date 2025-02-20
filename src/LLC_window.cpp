@@ -15,6 +15,9 @@ LLC_window::LLC_window(QWidget* parent, Qt::WindowFlags f)
     setupUi(this);
 
     connect(this->freq_slide, SIGNAL(sliderMoved(int)), this, SLOT(freqSlided(int)));
+    connect(this->load_slide, SIGNAL(sliderMoved(int)), this, SLOT(loadSlided(int)));
+    connect(this->Rload, SIGNAL(valueChanged(double)), this, SLOT(updateLoadSlide(double)));
+    updateLoadSlide(Rload->value());
 }
 
 qtcoro::awaitable<void> LLC_window::do_calc()
@@ -45,6 +48,18 @@ qtcoro::awaitable<void> LLC_window::do_calc()
     begin_calc->setEnabled(true);
 
     co_return;
+}
+
+void LLC_window::loadSlided(int pos)
+{
+    auto Z = tan( sin( static_cast<double>(pos) / 1000.0 * (std::numbers::pi/2.0) ) * (std::numbers::pi/2.0) );
+    this->Rload->setValue(Z);
+}
+
+void LLC_window::updateLoadSlide(double v)
+{
+    int pos = asin( atan(v) / (std::numbers::pi/2.0) )  / (std::numbers::pi/2.0) * 1000.0;
+    load_slide->setSliderPosition(pos);
 }
 
 void LLC_window::freqSlided(int pos)
