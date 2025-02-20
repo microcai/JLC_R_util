@@ -36,7 +36,7 @@ jobs:
     - name: Cache Static Qt Install
       id: cache-qt6
       if: startsWith(runner.os, 'Windows')
-      uses: actions/cache@v4
+      uses: actions/cache@v4.2.1
       with:
         path: msvc-qt
         key: qt6-win64-vc2022-static
@@ -44,7 +44,7 @@ jobs:
     - name: Install Static Qt
       if: startsWith(runner.os, 'Windows') && (steps.cache-qt6.outputs.cache-hit != 'true')
       run: |
-        Invoke-WebRequest https://github.com/microcai/static-build-qt6/releases/download/qt6_681_msvc/qt6_681_win64-msvc2022_static.zip -OutFile .\msvc-qt.zip
+        Invoke-WebRequest https://github.com/microcai/static-build-qt6/releases/download/qt6_682/qt6_682_win64-msvc2022_static-release.zip -OutFile .\msvc-qt.zip
         expand-archive -path "msvc-qt.zip"
 
     - name: setup env for cmake to pickup QT
@@ -99,18 +99,18 @@ jobs:
 
     - name: upload exe Release
       if: startsWith(github.ref, 'refs/tags/') && startsWith(runner.os, 'Windows') && matrix.build_type == 'Release'
-      uses: softprops/action-gh-release@v2.1.0
+      uses: softprops/action-gh-release@v2.2.1
       with:
         files: install/bin/eda-tool-win64.zip
 
     - name: upload linux Release
       if: startsWith(github.ref, 'refs/tags/') && startsWith(runner.os, 'Linux') && matrix.build_type == 'Release' && matrix.c_compiler == 'gcc'
-      uses: softprops/action-gh-release@v2.1.0
+      uses: softprops/action-gh-release@v2.2.1
       with:
         files: install/bin/eda-tool-linux.zip
 
     - name: Upload generic artifacts
-      uses: actions/upload-artifact@v4.4.3
+      uses: actions/upload-artifact@v4.6.0
       with:
         name: eda-tool-${{ runner.os }}
         path: install/bin
