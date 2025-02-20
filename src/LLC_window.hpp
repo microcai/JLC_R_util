@@ -18,5 +18,9 @@ private:
 public Q_SLOTS:
     void check_caculatable();
     void on_begin_calc_clicked();
+    void freqSlided(int);
+
+private:
+    qreal freq1, freq2, freq;
 };
 

@@ -58,7 +58,7 @@ set_target_properties(edatool PROPERTIES
 
 qt_add_resources(edatool imageresources
     PREFIX "/images"
-    FILES res/dcdc.png res/logo.png
+    FILES res/dcdc.png res/logo.png res/LLC.png
 )
 
 install(TARGETS edatool DESTINATION bin)
