@@ -35,11 +35,13 @@ qt_add_executable(edatool
     src/mainwindow.hpp
     src/I_Calc.hpp
     src/LLC_window.hpp
+    src/RCD_window.hpp
 
     src/R_select_window.cpp
     src/mainwindow.cpp
     src/I_Calc.cpp
     src/LLC_window.cpp
+    src/RCD_window.cpp
     src/main.cpp
     src/R_gen.cpp
 )

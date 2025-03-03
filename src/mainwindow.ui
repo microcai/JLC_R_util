@@ -35,6 +35,11 @@
         <string>LLC计算</string>
        </attribute>
       </widget>
+      <widget class="RCD_window" name="tab_4">
+       <attribute name="title">
+        <string>反激电源宝典</string>
+       </attribute>
+      </widget>
     </widget>
     </item>
    </layout>
@@ -86,6 +91,12 @@
    <class>LLC_window</class>
    <extends>QWidget</extends>
    <header>LLC_window.hpp</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>RCD_window</class>
+   <extends>QWidget</extends>
+   <header>RCD_window.hpp</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
