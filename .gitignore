@@ -1,4 +1,4 @@
 build/
 .cache/
 .vscode/
-release/
+tools/node_modules/

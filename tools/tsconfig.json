@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "sourceMap": true,
+        "esModuleInterop": true,
+        "typeRoots": [
+            "./node_modules/@types",
+            "./typings"
+        ],
+        "noImplicitThis": true,
+        "moduleResolution": "node",
+        "importHelpers": true,
+        "lib": [
+            "es2018"
+        ],
+        "target": "ES2018"
+    }
+}
