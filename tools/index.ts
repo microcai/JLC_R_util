@@ -12,25 +12,25 @@ interface SheetRow {
 
 function extractNumberWithSurfix(number_string_with_surfix) : number
 {
-    var reg_result = /([0-9kMm]+?)Ω/.exec(number_string_with_surfix);
+    var reg_result = /([\.0-9kMm]+?)Ω/.exec(number_string_with_surfix);
 
     number_string_with_surfix = reg_result[1];
 
 
-    var reg_result = /([0-9]+?)k/.exec(number_string_with_surfix);
+    var reg_result = /([\.0-9]+?)k/.exec(number_string_with_surfix);
 
     if (reg_result)
     {
         return  Decimal(reg_result[1]).mul(1000).toNumber();
     }
 
-    reg_result = /([0-9]+?)M/.exec(number_string_with_surfix);
+    reg_result = /([\.0-9]+?)M/.exec(number_string_with_surfix);
 
     if (reg_result)
     {
         return  Decimal(reg_result[1]).mul(1000000).toNumber();
     }
-    reg_result = /([0-9]+?)m/.exec(number_string_with_surfix);
+    reg_result = /([\.0-9]+?)m/.exec(number_string_with_surfix);
 
     if (reg_result)
     {
