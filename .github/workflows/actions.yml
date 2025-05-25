@@ -44,7 +44,7 @@ jobs:
     - name: Install Static Qt
       if: startsWith(runner.os, 'Windows') && (steps.cache-qt6.outputs.cache-hit != 'true')
       run: |
-        Invoke-WebRequest https://github.com/microcai/static-build-qt6/releases/download/qt6_682/qt6_682_win64-msvc2022_static-release.zip -OutFile .\msvc-qt.zip
+        Invoke-WebRequest https://github.com/microcai/static-build-qt6/releases/download/qt6_683/qt6_683_win64-msvc2022_static-release.zip -OutFile .\msvc-qt.zip
         expand-archive -path "msvc-qt.zip"
 
     - name: setup env for cmake to pickup QT
