@@ -5,7 +5,7 @@
 
 struct Resistance
 {
-    uint64_t value;
+    double value;
     char const* display_text;
     const char* jlc_part_number;
 
@@ -15,8 +15,8 @@ struct Resistance
     };
 
     Resistance(const Resistance&) = default;
-    Resistance(uint64_t value) : value(value), display_text(0), jlc_part_number(0){}
-    Resistance(uint64_t value, const char* d, const char* jlc) : value(value), display_text(d), jlc_part_number(jlc){}
+    Resistance(double value) : value(value), display_text(0), jlc_part_number(0){}
+    Resistance(double value, const char* d, const char* jlc) : value(value), display_text(d), jlc_part_number(jlc){}
 
     operator QString() const
     {
