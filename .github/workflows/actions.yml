@@ -10,33 +10,30 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-24.04, windows-latest]
+        os: [ubuntu-latest, windows-latest]
         build_type: [Release]
         c_compiler: [clang, cl]
         include:
           - os: windows-latest
             c_compiler: cl
             cpp_compiler: cl
-          - os: ubuntu-24.04
+          - os: ubuntu-latest
             c_compiler: clang
             cpp_compiler: clang++
         exclude:
           - os: windows-latest
             c_compiler: clang
-          - os: ubuntu-24.04
+          - os: ubuntu-latest
             c_compiler: cl
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
-
-    - name: Install ninja-build tool
-      uses: seanmiddleditch/gha-setup-ninja@v5
+      uses: actions/checkout@v6
 
     - name: Cache Static Qt Install
       id: cache-qt6
       if: startsWith(runner.os, 'Windows')
-      uses: actions/cache@v4.2.1
+      uses: actions/cache@v4
       with:
         path: msvc-qt
         key: qt6-win64-vc2022-static
@@ -44,16 +41,15 @@ jobs:
     - name: Install Static Qt
       if: startsWith(runner.os, 'Windows') && (steps.cache-qt6.outputs.cache-hit != 'true')
       run: |
-        Invoke-WebRequest https://github.com/microcai/static-build-qt6/releases/download/qt6_683/qt6_683_win64-msvc2022_static-release.zip -OutFile .\msvc-qt.zip
+        Invoke-WebRequest https://github.com/microcai/static-build-qt6/releases/download/qt_6_10_0/qt6.10.0_win64-msvc2022_static-release.zip -OutFile .\msvc-qt.zip
         expand-archive -path "msvc-qt.zip"
 
     - name: setup env for cmake to pickup QT
       if: startsWith(runner.os, 'Windows')
-      shell: bash
       run: |
-        echo "QT_ROOT_DIR=${{ github.workspace }}\\msvc-qt" >> $GITHUB_ENV
-        echo "QT_PLUGIN_PATH=${{ github.workspace }}\\msvc-qt\\plugins" >> $GITHUB_ENV
-        echo "CMAKE_PREFIX_PATH=${{ github.workspace }}\\msvc-qt" >> $GITHUB_ENV
+        echo "QT_ROOT_DIR=${{ github.workspace }}\\msvc-qt" >> $env:GITHUB_ENV
+        echo "QT_PLUGIN_PATH=${{ github.workspace }}\\msvc-qt\\plugins" >> $env:GITHUB_ENV
+        echo "CMAKE_PREFIX_PATH=${{ github.workspace }}\\msvc-qt" >> $env:GITHUB_ENV
 
     - name: setup env for cmake to pickup Clang
       if: startsWith(runner.os, 'Linux')
@@ -70,7 +66,9 @@ jobs:
 
     - name: Enable Developer Command Prompt
       if: startsWith(runner.os, 'Windows')
-      uses: ilammy/msvc-dev-cmd@v1.13.0
+      uses: TheMrMilchmann/setup-msvc-dev@v4
+      with:
+        arch: x64
 
     - name: Configure Sources
       run: >
@@ -99,18 +97,18 @@ jobs:
 
     - name: upload exe Release
       if: startsWith(github.ref, 'refs/tags/') && startsWith(runner.os, 'Windows') && matrix.build_type == 'Release'
-      uses: softprops/action-gh-release@v2.2.1
+      uses: softprops/action-gh-release@v2
       with:
         files: install/bin/eda-tool-win64.zip
 
     - name: upload linux Release
       if: startsWith(github.ref, 'refs/tags/') && startsWith(runner.os, 'Linux') && matrix.build_type == 'Release'
-      uses: softprops/action-gh-release@v2.2.1
+      uses: softprops/action-gh-release@v2
       with:
         files: install/bin/eda-tool-linux.zip
 
     - name: Upload generic artifacts
-      uses: actions/upload-artifact@v4.6.0
+      uses: actions/upload-artifact@v5
       with:
         name: eda-tool-${{ runner.os }}
         path: install/bin
